@@ -12,7 +12,7 @@ from telegram.ext import (
 
 from utils.credentials import BOT_TOKEN
 from utils.database import save_data
-from utils.ticket import handle_ticket_buy
+from utils.ticket import handle_ticket_buy_start, propose_ticket_buy_transaction, handle_ticket_purchase_complete
 
 # Enable logging
 logging.basicConfig(
@@ -23,7 +23,6 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 
 logger = logging.getLogger(__name__)
 
-
 CHAIN, ADDRESS, DELEGATE, APPROVE = range(4)
 
 chain_name_to_id = {
@@ -31,6 +30,21 @@ chain_name_to_id = {
     # "Gerli": "???",
     "Polygon": "0x89"
 }
+
+
+async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    message_text = update.message.text
+
+    if len(message_text.split(' ')) == 3:  # ticket buy <event_id>
+        await handle_ticket_buy_start(update, context)
+    if message_text.lower() == 'delegate added':
+        #
+        pass
+    if len(message_text.split(' ')) == 2:  # <chain_id> <address>
+        await propose_ticket_buy_transaction(update, context)
+    if message_text.lower() == 'done':
+        await handle_ticket_purchase_complete(update, context)
+
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot_welcome = f"""
@@ -42,7 +56,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def buy(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-
     reply_keyboard = [list(chain_name_to_id.keys())]
 
     await update.message.reply_text(
@@ -146,4 +159,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
