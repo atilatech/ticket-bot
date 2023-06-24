@@ -38,11 +38,11 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if len(message_text.split(' ')) == 3:  # ticket buy <event_id>
         await handle_ticket_buy_start(update, context)
-    if message_text.lower() == 'delegate added':
+    if message_text.lower() == 'added':
         await handle_delegate_added(update, context)
-    if len(message_text.split(' ')) == 2:  # <chain_id> <address>
+    elif len(message_text.split(' ')) == 2:  # <chain_id> <address>
         await propose_ticket_buy_transaction(update, context)
-    if message_text.lower() == 'done':
+    if message_text.lower() == 'paid':
         await handle_ticket_purchase_complete(update, context)
 
 

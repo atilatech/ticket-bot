@@ -38,6 +38,9 @@ async def propose_ticket_buy_transaction(update: Update,
                        f"https://app.safe.global/transactions/queue?safe={chain['prefix']}:{address}"
     await context.bot.send_message(chat_id=str(update.effective_chat.id),
                                    text=str(response_message))
+    await context.bot.send_message(chat_id=str(update.effective_chat.id),
+                                   text="Reply paid once the transaction has been executed")
+
 
 
 async def propose_transaction(chain_id, address):
