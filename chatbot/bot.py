@@ -11,6 +11,7 @@ from telegram.ext import (
 )
 
 from utils.credentials import BOT_TOKEN
+from utils.database import save_data
 from utils.ticket import handle_ticket_buy
 
 # Enable logging
@@ -23,8 +24,13 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
 
-CHAIN, ADDRESS, DELEGATE, APPROVE, COMPLETE = range(5)
+CHAIN, ADDRESS, DELEGATE, APPROVE = range(4)
 
+chain_name_to_id = {
+    "Gnosis Chain": "0x64",
+    # "Gerli": "???",
+    "Polygon": "0x89"
+}
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot_welcome = f"""
@@ -37,7 +43,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def buy(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
-    reply_keyboard = [["Gnosis Chain", "Gerli", "Polygon"]]
+    reply_keyboard = [list(chain_name_to_id.keys())]
 
     await update.message.reply_text(
 
@@ -53,7 +59,15 @@ async def buy(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 async def chain(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Stores the selected chain and asks for the wallet address."""
     user = update.message.from_user
-    logger.info(f"Selected Chain: {update.message.text}. User: {user}")
+    text = update.message.text
+    logger.info(f"Selected Chain: {text}. User: {user}")
+
+    user_to_save = {
+        'user_id': user.id,
+        'chain_id': chain_name_to_id[text],
+    }
+
+    save_data(user_to_save)
 
     await update.message.reply_text("What is your wallet address?")
 
@@ -63,7 +77,9 @@ async def chain(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 async def address(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Stores the address and asks to delegate."""
     user = update.message.from_user
-    logger.info("Wallet address: %s", update.message.text)
+    wallet_address = update.message.text
+    logger.info(f"Wallet address: {wallet_address}")
+
     await update.message.reply_text(
         "Next, add <...> as a delegate. Reply 'delegate added' when finished."
     )
