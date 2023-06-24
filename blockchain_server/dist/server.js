@@ -27,7 +27,7 @@ app.post('/propose-transaction', (req, res) => __awaiter(void 0, void 0, void 0,
     console.log(req.body);
     const safeAddress = req.body.address;
     const proposeResponse = yield (0, transaction_1.proposeTransaction)(safeAddress);
-    res.send(proposeResponse);
+    return res.json({ response: proposeResponse });
 }));
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at http://localhost:${port}`);

@@ -51,11 +51,16 @@ const delegateSigner = new ethers.Wallet(process.env.DELEGATE_PRIVATE_KEY!, prov
 
   const safeService = new SafeApiKit({ txServiceUrl, ethAdapter: delegateAdapter })
 
-  return await safeService.proposeTransaction({
+   await safeService.proposeTransaction({
     safeAddress,
     safeTransactionData: safeTransaction.data,
     safeTxHash,
     senderAddress: await delegateSigner.getAddress(),
     senderSignature: senderSignature.data,
   })
+
+  return {
+    safeTxHash,
+
+  }
 }

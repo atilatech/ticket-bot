@@ -22,7 +22,7 @@ app.post('/propose-transaction', async (req: Request, res: Response) => {
     console.log(req.body);
     const safeAddress = req.body.address;
     const proposeResponse = await proposeTransaction(safeAddress);
-    res.send(proposeResponse);
+    return res.json({response: proposeResponse});
 
 });
 
