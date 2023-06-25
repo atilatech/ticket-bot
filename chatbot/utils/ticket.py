@@ -15,6 +15,9 @@ CHAIN_DICT = {
     },
     '137': {
         'prefix': 'matic'
+    },
+    '1313161554': {
+        'prefix': 'aurora'
     }
 }
 

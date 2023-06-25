@@ -55,6 +55,13 @@ export const CHAIN_INFO: { [chainId: string]: ChainInfo } = {
         transactionServiceUrl: 'https://safe-transaction-bsc.safe.global',
         symbol: 'bnb'
     },
+    '1313161554': {
+        chainName: 'Aurora Mainnet',
+        rpcUrl: 'https://mainnet.aurora.dev',
+        blockExplorerUrl: 'https://explorer.mainnet.aurora.dev/',
+        transactionServiceUrl: 'https://safe-transaction-aurora.safe.global/',
+        symbol: 'aurora'
+    },
 }
 
 
