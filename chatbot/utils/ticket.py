@@ -1,7 +1,8 @@
 from telegram import Update
-from telegram.ext import ContextTypes
+from telegram.ext import ContextTypes, ConversationHandler
 import requests
 
+QR_CODE = "https://www.asthmaandallergyfriendly.com/INT/images/static_qr_code_without_logo1.png"
 CHAIN_DICT = {
     '5': {
         'prefix': 'gor'
@@ -76,6 +77,11 @@ async def propose_transaction(chain_id, address):
         return e
 
 
-def handle_ticket_purchase_complete(update: Update,
+async def handle_ticket_purchase_complete(update: Update,
                                     context: ContextTypes.DEFAULT_TYPE):
-    pass
+    await context.bot.send_message(chat_id=str(update.effective_chat.id),
+                                   text="Thanks for booking with Atila TicketBot. Your QR Code is below.")
+    await context.bot.send_photo(chat_id=str(update.effective_chat.id),
+                                 photo=QR_CODE)
+
+    return ConversationHandler.END
