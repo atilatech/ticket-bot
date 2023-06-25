@@ -8,6 +8,8 @@ CHAIN_DICT = {
     }
 }
 
+DELEGATE, ADDRESS, APPROVE = range(3)
+
 
 async def handle_ticket_buy_start(update: Update,
                                   context: ContextTypes.DEFAULT_TYPE):
@@ -16,6 +18,7 @@ async def handle_ticket_buy_start(update: Update,
     """
     await context.bot.send_message(chat_id=str(update.effective_chat.id),
                                    text=text)
+    return DELEGATE
 
 
 async def handle_delegate_added(update: Update,
@@ -25,6 +28,7 @@ async def handle_delegate_added(update: Update,
     """
     await context.bot.send_message(chat_id=str(update.effective_chat.id),
                                    text=text)
+    return ADDRESS
 
 
 async def propose_ticket_buy_transaction(update: Update,
@@ -40,7 +44,7 @@ async def propose_ticket_buy_transaction(update: Update,
                                    text=str(response_message))
     await context.bot.send_message(chat_id=str(update.effective_chat.id),
                                    text="Reply paid once the transaction has been executed")
-
+    return APPROVE
 
 
 async def propose_transaction(chain_id, address):

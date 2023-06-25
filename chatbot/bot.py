@@ -1,6 +1,6 @@
 import logging
 
-from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+from telegram import Update
 from telegram.ext import (
     Application,
     CommandHandler,
@@ -11,9 +11,8 @@ from telegram.ext import (
 )
 
 from utils.credentials import BOT_TOKEN
-from utils.database import save_data
 from utils.ticket import handle_ticket_buy_start, propose_ticket_buy_transaction, handle_ticket_purchase_complete, \
-    handle_delegate_added
+    handle_delegate_added, DELEGATE, ADDRESS, APPROVE
 
 # Enable logging
 logging.basicConfig(
@@ -23,8 +22,6 @@ logging.basicConfig(
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
 logger = logging.getLogger(__name__)
-
-CHAIN, ADDRESS, DELEGATE, APPROVE = range(4)
 
 chain_name_to_id = {
     "Gnosis Chain": "0x64",
@@ -53,7 +50,21 @@ def main() -> None:
 
     text_filter = filters.TEXT & ~filters.COMMAND
 
+    # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
+    # conv_handler = ConversationHandler(
+    #     entry_points=[CommandHandler("buy", handle_ticket_buy_start),
+    #                   MessageHandler(text_filter, handle_ticket_buy_start)],
+    #     states={
+    #         DELEGATE: [MessageHandler(text_filter, handle_delegate_added)],
+    #         ADDRESS: [MessageHandler(text_filter, propose_ticket_buy_transaction)],
+    #         APPROVE: [MessageHandler(text_filter, handle_ticket_purchase_complete)],
+    #     },
+    #     fallbacks=[CommandHandler("cancel", ...)],
+    # )
+
+    # application.add_handler(conv_handler)
     application.add_handler(MessageHandler(text_filter, chat))
+
     # Run the bot until the user presses Ctrl-C
     application.run_polling(allowed_updates=Update.ALL_TYPES)
 
