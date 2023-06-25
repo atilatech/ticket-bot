@@ -5,6 +5,9 @@ import requests
 CHAIN_DICT = {
     '5': {
         'prefix': 'gor'
+    },
+    '137': {
+        'prefix': 'matic'
     }
 }
 
