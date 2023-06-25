@@ -43,6 +43,16 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await handle_ticket_purchase_complete(update, context)
 
 
+async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Cancels and ends the conversation."""
+    user = update.message.from_user
+    await update.message.reply_text(
+        "Transaction cancelled."
+    )
+
+    return ConversationHandler.END
+
+
 def main() -> None:
     """Run the bot."""
     # Create the Application and pass it your bot's token.
@@ -51,13 +61,13 @@ def main() -> None:
     text_filter = filters.TEXT & ~filters.COMMAND
 
     conv_handler = ConversationHandler(
-        entry_points=[MessageHandler(filters.Regex(r"^ticket buy\s+\S+\s+\S+$"), handle_ticket_buy_start)],
+        entry_points=[MessageHandler(text_filter, handle_ticket_buy_start)],
         states={
             DELEGATE: [MessageHandler(text_filter, handle_delegate_added)],
             ADDRESS: [MessageHandler(text_filter, propose_ticket_buy_transaction)],
             APPROVE: [MessageHandler(text_filter, handle_ticket_purchase_complete)],
         },
-        fallbacks=[CommandHandler("cancel", ...)],
+        fallbacks=[CommandHandler("cancel", cancel)],
     )
 
     application.add_handler(conv_handler)
