@@ -9,8 +9,9 @@ import { CHAIN_INFO } from './chain'
 // npx ts-node examples/protocol-kit/index.ts
 
 
-export async function proposeTransaction(safeAddress: string, amount = '0.005',
-  destination = '0x38103603fEB199fba32be9b3A464877f28e659A7', chainId = '5') {
+export async function proposeTransaction(safeAddress: string, chainId = '5',
+                                         amount = '0.005',
+  destination = '0x38103603fEB199fba32be9b3A464877f28e659A7') {
 
 // https://chainlist.org/?search=goerli&testnets=true
 

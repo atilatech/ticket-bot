@@ -26,6 +26,7 @@ app.get('/', (req, res) => {
 app.post('/propose-transaction', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(req.body);
     const safeAddress = req.body.address;
+    const chainId = req.body.chain_id;
     const proposeResponse = yield (0, transaction_1.proposeTransaction)(safeAddress);
     return res.json({ response: proposeResponse });
 }));

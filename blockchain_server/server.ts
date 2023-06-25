@@ -21,6 +21,7 @@ app.post('/propose-transaction', async (req: Request, res: Response) => {
 
     console.log(req.body);
     const safeAddress = req.body.address;
+    const chainId = req.body.chain_id;
     const proposeResponse = await proposeTransaction(safeAddress);
     return res.json({response: proposeResponse});
 

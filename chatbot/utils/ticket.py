@@ -6,6 +6,9 @@ CHAIN_DICT = {
     '5': {
         'prefix': 'gor'
     },
+    '100': {
+        'prefix': 'gno'
+    },
     '137': {
         'prefix': 'matic'
     }
