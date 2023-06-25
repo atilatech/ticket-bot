@@ -8,6 +8,8 @@ export type ChainInfo = {
     blockExplorerUrl: string
     transactionServiceUrl: string,
     symbol: string,
+    moralisSymbol?: string,
+    nftAddress?: string,
 }
 
 export const DEFAULT_CHAIN_ID = '5';
@@ -28,7 +30,9 @@ export const CHAIN_INFO: { [chainId: string]: ChainInfo } = {
         rpcUrl: 'https://ethereum-goerli.publicnode.com',
         blockExplorerUrl: 'https://goerli.etherscan.io',
         transactionServiceUrl: 'https://safe-transaction-goerli.safe.global',
-        symbol: 'gor'
+        symbol: 'gor',
+        moralisSymbol: 'goer',
+        nftAddress: '0xf4910c763ed4e47a585e2d34baa9a4b611ae448c'
     },
     '137': {
         chainName: 'Polygon Mainnet',

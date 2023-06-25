@@ -1,12 +1,14 @@
 {
   "dependencies": {
+    "@moralisweb3/common-evm-utils": "^2.22.3",
     "@safe-global/api-kit": "^1.1.0",
     "@safe-global/protocol-kit": "^1.0.1",
     "@safe-global/safe-core-sdk-types": "^2.0.0",
     "body-parser": "^1.20.2",
     "dotenv": "^16.3.1",
     "ethers": "5.7.2",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "moralis": "^2.22.3"
   },
   "scripts": {
     "build": "npx tsc",

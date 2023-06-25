@@ -3,6 +3,7 @@ import SafeApiKit from '@safe-global/api-kit'
 import Safe, { EthersAdapter, SafeFactory, SafeAccountConfig } from '@safe-global/protocol-kit'
 import { SafeTransaction, SafeTransactionDataPartial } from '@safe-global/safe-core-sdk-types'
 import { CHAIN_INFO } from './chain'
+import { walletHasNFT } from './nft'
 
 // Run this file:
 // source examples/.env
@@ -18,6 +19,12 @@ export async function proposeTransaction(safeAddress: string, chainId = '5',
 const chain = CHAIN_INFO[chainId.toString()];
 console.log(chain.rpcUrl);
 const provider = new ethers.providers.JsonRpcProvider(chain.rpcUrl)
+
+const eligibleForDiscount = await walletHasNFT(chainId, safeAddress)
+
+if (eligibleForDiscount){
+  amount = '0.00375'
+}
 
 // Create a wallet instance from the sender's private key
 const delegateSigner = new ethers.Wallet(process.env.DELEGATE_PRIVATE_KEY!, provider)
@@ -62,7 +69,6 @@ const delegateSigner = new ethers.Wallet(process.env.DELEGATE_PRIVATE_KEY!, prov
 
   return {
     safeTxHash,
-    eligibleForDiscount: false,
-
+    eligibleForDiscount,
   }
 }

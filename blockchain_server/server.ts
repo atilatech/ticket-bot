@@ -1,11 +1,13 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
-import SafeApiKit from '@safe-global/api-kit'
-import { ethers } from 'ethers'
-import { EthersAdapter } from '@safe-global/protocol-kit'
+// Import Moralis
+const Moralis = require("moralis").default;
+// Import the EvmChain dataType
+const { EvmChain } = require("@moralisweb3/common-evm-utils");
 import { proposeTransaction } from './transaction';
 import bodyParser from 'body-parser';
-
+import { walletHasNFT } from './nft';
+const MORALIS_API_KEY = process.env.MORALIS_API_KEY;
 
 dotenv.config();
 
@@ -27,6 +29,25 @@ app.post('/propose-transaction', async (req: Request, res: Response) => {
 
 });
 
-app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+app.post('/has-nft', async (req: Request, res: Response) => {
+
+  console.log(req.body);
+  const address = req.body.address;
+  const chainId = req.body.chain_id;
+  const hasNft = await walletHasNFT(chainId, address);
+  return res.json({hasNft});
+
 });
+
+// Add this a startServer function that initialises Moralis
+const startServer = async () => {
+  await Moralis.start({
+    apiKey: MORALIS_API_KEY,
+  });
+
+  app.listen(port, () => {
+    console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+  });
+};
+
+startServer();

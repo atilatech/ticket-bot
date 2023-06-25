@@ -9,7 +9,6 @@ QR_CODE = "https://www.asthmaandallergyfriendly.com/INT/images/static_qr_code_wi
 CHAIN_DICT = {
     '5': {
         'prefix': 'gor',
-        'nft_address': '0xf4910c763ed4e47a585e2d34baa9a4b611ae448c'
     },
     '100': {
         'prefix': 'gno'
@@ -43,10 +42,6 @@ async def handle_delegate_added(update: Update,
     await context.bot.send_message(chat_id=str(update.effective_chat.id),
                                    text=text)
     return ADDRESS
-
-
-async def address_owns_nft(chain_id, address):
-    pass
 
 
 async def propose_ticket_buy_transaction(update: Update,
