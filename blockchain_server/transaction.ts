@@ -62,6 +62,7 @@ const delegateSigner = new ethers.Wallet(process.env.DELEGATE_PRIVATE_KEY!, prov
 
   return {
     safeTxHash,
+    eligibleForDiscount: false,
 
   }
 }

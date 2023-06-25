@@ -50,20 +50,18 @@ def main() -> None:
 
     text_filter = filters.TEXT & ~filters.COMMAND
 
-    # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
-    # conv_handler = ConversationHandler(
-    #     entry_points=[CommandHandler("buy", handle_ticket_buy_start),
-    #                   MessageHandler(text_filter, handle_ticket_buy_start)],
-    #     states={
-    #         DELEGATE: [MessageHandler(text_filter, handle_delegate_added)],
-    #         ADDRESS: [MessageHandler(text_filter, propose_ticket_buy_transaction)],
-    #         APPROVE: [MessageHandler(text_filter, handle_ticket_purchase_complete)],
-    #     },
-    #     fallbacks=[CommandHandler("cancel", ...)],
-    # )
+    conv_handler = ConversationHandler(
+        entry_points=[MessageHandler(filters.Regex(r"^ticket buy\s+\S+\s+\S+$"), handle_ticket_buy_start)],
+        states={
+            DELEGATE: [MessageHandler(text_filter, handle_delegate_added)],
+            ADDRESS: [MessageHandler(text_filter, propose_ticket_buy_transaction)],
+            APPROVE: [MessageHandler(text_filter, handle_ticket_purchase_complete)],
+        },
+        fallbacks=[CommandHandler("cancel", ...)],
+    )
 
-    # application.add_handler(conv_handler)
-    application.add_handler(MessageHandler(text_filter, chat))
+    application.add_handler(conv_handler)
+    # application.add_handler(MessageHandler(text_filter, chat))
 
     # Run the bot until the user presses Ctrl-C
     application.run_polling(allowed_updates=Update.ALL_TYPES)

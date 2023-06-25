@@ -2,6 +2,9 @@ from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler
 import requests
 
+# Global state
+CHAT_INFO = {}  # id: dict of relevant chat info
+
 QR_CODE = "https://www.asthmaandallergyfriendly.com/INT/images/static_qr_code_without_logo1.png"
 CHAIN_DICT = {
     '5': {
@@ -23,6 +26,9 @@ async def handle_ticket_buy_start(update: Update,
     text = """
     Please add 0x6Dbd26Bca846BDa60A90890cfeF8fB47E7d0f22c to your safe. Reply 'delegate added' when done
     """
+    user = update.message.from_user.id
+    ticket = update.message.text.split(' ')[2]  # ticket buy afropolitan
+    CHAT_INFO[user] = {'ticket': ticket}
     await context.bot.send_message(chat_id=str(update.effective_chat.id),
                                    text=text)
     return DELEGATE
@@ -45,8 +51,12 @@ async def propose_ticket_buy_transaction(update: Update,
     response = await propose_transaction(chain_id, address)
     print('response', response)
     chain = CHAIN_DICT[chain_id]
-    response_message = "Approve your transaction:" \
-                       f"https://app.safe.global/transactions/queue?safe={chain['prefix']}:{address}"
+    response_message = ""
+    if response['response']['eligibleForDiscount']:
+        response_message += "Since you own an Afropolitan NFT, you are eligible for 20% off this event. " \
+                            "The discount has already been applied."
+    response_message += "Approve your transaction:" \
+                        f"https://app.safe.global/transactions/queue?safe={chain['prefix']}:{address}"
     await context.bot.send_message(chat_id=str(update.effective_chat.id),
                                    text=str(response_message))
     await context.bot.send_message(chat_id=str(update.effective_chat.id),
@@ -78,10 +88,11 @@ async def propose_transaction(chain_id, address):
 
 
 async def handle_ticket_purchase_complete(update: Update,
-                                    context: ContextTypes.DEFAULT_TYPE):
+                                          context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=str(update.effective_chat.id),
                                    text="Thanks for booking with Atila TicketBot. Your QR Code is below.")
     await context.bot.send_photo(chat_id=str(update.effective_chat.id),
                                  photo=QR_CODE)
+    # Send an NFT to wallet
 
     return ConversationHandler.END
