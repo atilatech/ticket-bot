@@ -3,7 +3,7 @@ from collections import defaultdict
 from pymongo import MongoClient
 from utils.credentials import MONGODB_URL, MONGODB_USERNAME, MONGODB_PASSWORD
 
-USERS_TABLE = 'ticketbot_table'
+USERS_TABLE = 'ticketbot_users'
 
 # Provide the mongodb atlas url to connect python to mongodb using pymongo
 
