@@ -24,7 +24,7 @@ DELEGATE, ADDRESS, APPROVE = range(3)
 async def handle_ticket_buy_start(update: Update,
                                   context: ContextTypes.DEFAULT_TYPE):
     text = """
-    Please add 0x6Dbd26Bca846BDa60A90890cfeF8fB47E7d0f22c to your safe. Reply 'delegate added' when done
+    Please add 0x6Dbd26Bca846BDa60A90890cfeF8fB47E7d0f22c to your safe. Reply 'added' when done
     """
     user = update.message.from_user.id
     ticket = update.message.text.split(' ')[2]  # ticket buy afropolitan
@@ -53,10 +53,14 @@ async def propose_ticket_buy_transaction(update: Update,
     chain = CHAIN_DICT[chain_id]
     response_message = ""
     if response['response']['eligibleForDiscount']:
-        response_message += "Since you own an Afropolitan NFT, you are eligible for 20% off this event. " \
-                            "The discount has already been applied."
-    response_message += "Approve your transaction:" \
-                        f"https://app.safe.global/transactions/queue?safe={chain['prefix']}:{address}"
+        response_message += "Since you own an Afropolitan NFT, you will pay a discounted rate."
+    safe_tx_hash = response['response']['safeTxHash']
+
+    # response_url = f"https://app.safe.global/transactions/queue?safe={chain['prefix']}:{address}"
+    response_url = f"https://app.safe.global/transactions/tx?id=multisig_{address}_{safe_tx_hash}" \
+                   f"&safe={chain['prefix']}%3A{address}"
+    response_message += f"Approve your transaction: {response_url}"
+
     await context.bot.send_message(chat_id=str(update.effective_chat.id),
                                    text=str(response_message))
     await context.bot.send_message(chat_id=str(update.effective_chat.id),
