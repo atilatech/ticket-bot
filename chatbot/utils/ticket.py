@@ -56,9 +56,9 @@ async def propose_ticket_buy_transaction(update: Update,
         response_message += "Since you own an Afropolitan NFT, you will pay a discounted rate."
     safe_tx_hash = response['response']['safeTxHash']
 
-    # response_url = f"https://app.safe.global/transactions/queue?safe={chain['prefix']}:{address}"
-    response_url = f"https://app.safe.global/transactions/tx?id=multisig_{address}_{safe_tx_hash}" \
-                   f"&safe={chain['prefix']}%3A{address}"
+    response_url = f"https://app.safe.global/transactions/queue?safe={chain['prefix']}:{address}"
+    # response_url = f"https://app.safe.global/transactions/tx?id=multisig_{address}_{safe_tx_hash}" \
+    #                f"&safe={chain['prefix']}%3A{address}"
     response_message += f"Approve your transaction: {response_url}"
 
     await context.bot.send_message(chat_id=str(update.effective_chat.id),
