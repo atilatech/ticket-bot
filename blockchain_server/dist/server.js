@@ -27,7 +27,7 @@ app.post('/propose-transaction', (req, res) => __awaiter(void 0, void 0, void 0,
     console.log(req.body);
     const safeAddress = req.body.address;
     const chainId = req.body.chain_id;
-    const proposeResponse = yield (0, transaction_1.proposeTransaction)(safeAddress);
+    const proposeResponse = yield (0, transaction_1.proposeTransaction)(safeAddress, chainId);
     return res.json({ response: proposeResponse });
 }));
 app.listen(port, () => {
